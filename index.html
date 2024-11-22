@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>슬롯머신 게임</title>
+  <style>
+    body { 
+      text-align: center; 
+      font-family: 'Arial', sans-serif; 
+      background-color: #222; 
+      color: #fff; 
+      margin-top: 50px;
+    }
+
+    h1 { 
+      color: #ffeb3b; 
+      font-size: 2.5em; 
+      margin-bottom: 20px; 
+      text-shadow: 2px 2px #555;
+    }
+
+    .slot-container {
+      display: inline-block;
+      padding: 20px;
+      background-color: #333;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .slot {
+      font-size: 2.5em;
+      padding: 10px;
+      width: 70px;
+      height: 70px;
+      line-height: 70px;
+      display: inline-block;
+      margin: 0 5px;
+      background-color: #444;
+      border-radius: 5px;
+      color: #ffeb3b;
+      box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .result {
+      font-size: 1.8em;
+      color: #ff5722;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 1.2em;
+      margin-top: 20px;
+      color: #222;
+      background-color: #ffeb3b;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #ffc107;
+    }
+  </style>
+</head>
+<body>
+
+<h1>슬롯머신 게임</h1>
+<div class="slot-container">
+  <span class="slot" id="slot1">0</span>
+  <span class="slot" id="slot2">0</span>
+  <span class="slot" id="slot3">0</span>
+</div>
+<div class="result" id="result"></div>
+<button onclick="spin()">슬롯 돌리기</button>
+
+<script>
+  // 난수 생성 함수
+  function getRandomNumber() {
+    return Math.floor(Math.random() * 20) + 1;
+  }
+
+  // 슬롯 돌리기 함수
+  function spin() {
+    const slotElements = [
+      document.getElementById('slot1'),
+      document.getElementById('slot2'),
+      document.getElementById('slot3')
+    ];
+    let slotValues = [0, 0, 0];
+
+    // 슬롯 회전 애니메이션
+    const intervals = slotElements.map((slot, index) => {
+      return setInterval(() => {
+        slotValues[index] = getRandomNumber();
+        slot.textContent = slotValues[index];
+      }, 100);
+    });
+
+    // 슬롯이 순서대로 멈추도록 타이머 설정
+    setTimeout(() => { clearInterval(intervals[0]); }, 2000);
+    setTimeout(() => { clearInterval(intervals[1]); }, 4000);
+    setTimeout(() => {
+      clearInterval(intervals[2]);
+
+      // 결과 계산
+      const [s1, s2, s3] = slotValues;
+      let message = "";
+
+      if (s1 === s2 && s2 === s3) {
+        if (s1 === 7) {
+          message = "777 잭팟!!! 6배 보상!";
+        } else {
+          message = "3개 일치! 3배 보상!";
+        }
+      } else if (s1 === s2 || s2 === s3 || s1 === s3) {
+        message = "2개 일치! 2배 보상!";
+      } else {
+        message = "아쉽지만 꽝입니다!";
+      }
+
+      document.getElementById('result').textContent = message;
+    }, 6000);
+  }
+</script>
+
+</body>
+</html>
